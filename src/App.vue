@@ -1,17 +1,21 @@
 <template>
   <div id="app">
     <router-view/>
-    <champion />
+    <Select />
+    <FamousSets />
   </div>
 </template>
 
 <script>
+import Select from '@/components/Select';
 import Champion from '@/components/Champion';
+import FamousSets from '@/components/FamousSets';
 
 export default {
   name: 'app',
   components : {
-    Champion,
+    Select,
+    FamousSets,
   }
 }
 </script>

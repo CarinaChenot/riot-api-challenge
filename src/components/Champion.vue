@@ -1,6 +1,23 @@
 <template>
+
 <div class="select-wrapper">
+  <Search />
+  {{ toto }}
   <div class="select-champion">
+    <ais-index
+      app-id="latency"
+      api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+      index-name="bestbuy"
+    >
+    <ais-search-box></ais-search-box>
+    <ais-results>
+      <template slot-scope="{ result }">
+        <h2>
+          <ais-highlight :result="result" attribute-name="name"></ais-highlight>
+        </h2>
+      </template>
+    </ais-results>
+  </ais-index>
     <h1>Select champion</h1>
     <div class="champions-grid">
       <div class="champion" v-for="champion in champions" @click="selectChampion(champion)" :key="champion.name">{{ champion.name }}</div>
@@ -18,11 +35,31 @@
 
 <script>
 import Runes from '@/components/Runes'
+import Search from '@/components/Search'
 import champions from '@/data/champion.json';
+
+const algoliasearch = require('algoliasearch');
+// const client = algoliasearch("6DZDRJMUEP", "081dc30f8b961197b7fe2b93cf18e4e9");
+const index = client.initIndex('champions');
+
+let champArray = [];
+
+for (name in champions.data) {
+  champArray.push({body: name});
+}
+
+console.log(champArray)
+localStorage.setItem('champ', JSON.stringify(champArray))
+// index.addObjects(champArray, function(err, content) {
+//   if (err) {
+//     console.error(err);
+//   }
+// });
 
 export default {
   components: {
     Runes,
+    Search,
   },
   data() {
     return {
@@ -30,6 +67,7 @@ export default {
       selectedChampion: null,
       selectedLane: null,
       selectedRune: null,
+      toto: champArray,
       lanes: ['top', 'jungle', 'mid', 'bottom', 'support'],
     }
   },

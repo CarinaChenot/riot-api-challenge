@@ -3,7 +3,8 @@
 </template>
 
 <script>
-import '@/components/radarChart'
+import * as d3 from 'd3';
+import '@/components/radarChart';
 
 
       /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
