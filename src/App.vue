@@ -1,13 +1,22 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
+    <Select />
+    <FamousSets />
   </div>
 </template>
 
 <script>
+import Select from '@/components/Select';
+import Champion from '@/components/Champion';
+import FamousSets from '@/components/FamousSets';
+
 export default {
-  name: 'app'
+  name: 'app',
+  components : {
+    Select,
+    FamousSets,
+  }
 }
 </script>
 
@@ -16,7 +25,6 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
