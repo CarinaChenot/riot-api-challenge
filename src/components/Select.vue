@@ -1,7 +1,7 @@
 <template>
 <div class="select-wrapper">
   <Search v-on:selectedChamp="selectChampion" v-if="!selectedChampion"/>
-  <div class="select-lane" v-else>
+  <div class="select-lane" v-if="selectedChampion && !selectedLane">
     <h1>Select lane</h1>
     <div class="lanes-grid">
       <div class="lane" v-for="lane in lanes" @click="selectLane(lane)" :key="lane">
@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <Runes />
+  <Runes v-if="selectedChampion && selectedLane" />
 </div>
 </template>
 
@@ -71,10 +71,19 @@ export default {
 }
 </script>
 <style lang="stylus">
+.select-wrapper
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
+
 .champions-grid
   display grid
   grid-template-columns repeat(10, 1fr)
 
+.select-lane
+  h1
+    text-align center
 .lanes-grid
   display flex
 
