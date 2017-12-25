@@ -9,7 +9,7 @@
       <template slot-scope="{ result }">
         <div @click="selectChamp(result)">
           <ais-highlight :result="result" attribute-name="body"></ais-highlight>
-          <img src="" alt="">
+          <img class="champion_square" :src="championPath(result.body)" alt="">
         </div>
       </template>
     </ais-results>
@@ -20,7 +20,7 @@
 export default {
   methods: {
     championPath(champ) {
-      return require(`../assets/lanes/${champ}.png`);
+      return require(`../assets/champions/${champ}.png`);
     },
     selectChamp(champ) {
       this.$emit('selectedChamp', champ.body)
@@ -32,5 +32,13 @@ export default {
 <style lang="stylus">
 .ais-results
   display grid
-  grid-template-columns repeat(10, 1fr)
+  grid-template-columns repeat(15, 80px)
+  grid-gap 1em
+
+.ais-highlight
+  display none
+
+.champion_square
+  max-width 100%
+  // max-height 20px
 </style>
