@@ -8,7 +8,6 @@
 
 <script>
 import Select from '@/components/Select';
-import Champion from '@/components/Champion';
 import FamousSets from '@/components/FamousSets';
 
 export default {

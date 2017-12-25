@@ -34,11 +34,11 @@ export default {
   methods: {
     selectRune(rune) {
       this.selectedRune = rune;
-      console.log(this.selectedRune.slots);
+      // console.log(this.selectedRune.slots);
 
     },
     runePath(rune) {
-      console.log(rune.id)
+      // console.log(rune.id)
       return require(`../assets/runes/${rune.id}.png`);
     }
   }

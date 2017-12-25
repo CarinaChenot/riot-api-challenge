@@ -1,14 +1,6 @@
 <template>
 <div class="select-wrapper">
-   <Search />
-  <div class="select-champion" v-if="!selectedChampion">
-    <h1>Select champion</h1>
-    <div class="champions-grid">
-      <div class="champion" v-for="champion in champions" @click="selectChampion(champion)" :key="champion.name">{{ champion.name }}
-
-      </div>
-    </div>
-  </div>
+  <Search v-on:selectedChamp="selectChampion" v-if="!selectedChampion"/>
   <div class="select-lane" v-else>
     <h1>Select lane</h1>
     <div class="lanes-grid">
@@ -26,8 +18,6 @@ import Runes from '@/components/Runes'
 import Search from '@/components/Search'
 import champions from '@/data/champion.json';
 
-console.log(champions.data)
-
 export default {
   components: {
     Runes,
@@ -39,24 +29,43 @@ export default {
       selectedChampion: null,
       selectedLane: null,
       selectedRune: null,
-      lanes: ['top', 'jungler', 'mid', 'bot'],
+      lanes: ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'],
+      stats: null,
     }
   },
   mounted() {
-    console.log(this.runes)
   },
   methods: {
     selectChampion(champion) {
-      this.selectedChampion = champion.id;
+      this.selectedChampion = champion;
     },
     selectLane(lane) {
       this.selectedLane = lane;
+      this.getStats();
     },
     selectRune(rune) {
       this.selectedRune = rune.id;
     },
     lanePath(lane) {
       return require(`../assets/lanes/${lane}.png`);
+    },
+    getStats() {
+      let key = this.champions[this.selectedChampion].key;
+      // let url = `http://s477188762.onlinehome.fr/apiChallenge/data/${key}.json`;
+      let url = `../static/${key}.json`;
+
+      fetch(url)
+        .then((response) => {
+          return response.json();
+        })
+        .then((json) => {
+          this.stats = this.getSets(json);
+        });
+    },
+    getSets(statsJson) {
+      const index = statsJson.Positions.findIndex(p => p._id == this.selectedLane)
+
+      return statsJson.Positions[index].Sets;
     }
   }
 }

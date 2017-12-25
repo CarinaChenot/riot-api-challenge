@@ -7,10 +7,10 @@
     <ais-search-box></ais-search-box>
     <ais-results>
       <template slot-scope="{ result }">
-        <h2>
+        <div @click="selectChamp(result)">
           <ais-highlight :result="result" attribute-name="body"></ais-highlight>
           <img src="" alt="">
-        </h2>
+        </div>
       </template>
     </ais-results>
   </ais-index>
@@ -21,6 +21,9 @@ export default {
   methods: {
     championPath(champ) {
       return require(`../assets/lanes/${champ}.png`);
+    },
+    selectChamp(champ) {
+      this.$emit('selectedChamp', champ.body)
     }
   }
 }
