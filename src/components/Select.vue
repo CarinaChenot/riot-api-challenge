@@ -29,7 +29,7 @@ export default {
       selectedChampion: null,
       selectedLane: null,
       selectedRune: null,
-      lanes: ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM'],
+      lanes: ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'SUPPORT'],
       stats: null,
     }
   },
