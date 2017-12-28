@@ -16,7 +16,11 @@
 <script>
 import Runes from '@/components/Runes'
 import Search from '@/components/Search'
-import champions from '@/data/champion.json';
+import champions from '@/data/champion.json'
+import * as alertify from 'alertifyjs';
+    
+require('alertifyjs/build/css/alertify.min.css')
+require('alertifyjs/build/css/themes/semantic.min.css')
 
 export default {
   components: {
@@ -51,8 +55,7 @@ export default {
     },
     getStats() {
       let key = this.champions[this.selectedChampion].key;
-      // let url = `http://s477188762.onlinehome.fr/apiChallenge/data/${key}.json`;
-      let url = `../static/${key}.json`;
+      let url = `../src/assets/stats/${key}.json`;
 
       fetch(url)
         .then((response) => {
@@ -64,12 +67,17 @@ export default {
     },
     getSets(statsJson) {
       const index = statsJson.Positions.findIndex(p => p._id == this.selectedLane)
-
-      return statsJson.Positions[index].Sets;
+      
+      if(index == -1){
+          alertify.alert ("Oops!", "We don't have any data for " + this.selectedChampion + " " + this.selectedLane);
+      }
+      else
+        return statsJson.Positions[index].Sets;
     }
   }
 }
 </script>
+
 <style lang="stylus">
 .select-wrapper
   display flex

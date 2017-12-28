@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <Graph/>
     <Select />
     <FamousSets />
   </div>
@@ -9,10 +10,12 @@
 <script>
 import Select from '@/components/Select';
 import FamousSets from '@/components/FamousSets';
-
+import Graph from '@/components/Graph';
+    
 export default {
   name: 'app',
   components : {
+    Graph,
     Select,
     FamousSets,
   }

@@ -41,6 +41,7 @@ function merge(conf1, conf2) {
 }
 
 //adapted from https://www.visualcinnamon.com/2015/10/different-look-d3-radar-chart.html
+/* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
 export default class RadarChart {
 
     constructor(id, axes, options) {
@@ -190,7 +191,7 @@ export default class RadarChart {
 
         if (this.data != null) {
 
-            if (this.data.length !== data.length) {
+            if (this.data.length !== data.length) {           
                 g.selectAll(".radarWrapper").filter(function(d, i) {
                         return i >= data.length
                     }).attr("opacity", "1")
@@ -212,13 +213,13 @@ export default class RadarChart {
         } else {
 
             //Create a wrapper for the blobs 
-            var blobWrapper = g.selectAll(".radarWrapper")
+            const blobWrapper = g.selectAll(".radarWrapper")
                 .data(data)
                 .enter().append("g")
                 .attr("class", "radarWrapper");
 
             //Append the backgrounds 
-            var blobBackground = blobWrapper.append("path")
+            const blobBackground = blobWrapper.append("path")
                 .attr("class", "radarArea")
                 .attr("d", radarLine)
                 .style("fill-opacity", 0.7)
@@ -241,7 +242,7 @@ export default class RadarChart {
                 });
 
             //Create the outlines 
-            var blobOutlines = blobWrapper.append("path")
+            const blobOutlines = blobWrapper.append("path")
                 .attr("class", "radarStroke")
                 .attr("d", radarLine)
                 .style("stroke-width", cfg.strokeWidth + "px")

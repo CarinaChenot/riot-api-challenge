@@ -1,94 +1,140 @@
 <template>
-  <div class="radarChart"></div>
+<div class="radarChart"></div>
+
 </template>
 
 <script>
-import * as d3 from 'd3';
-import '@/components/radarChart';
+    import * as d3 from 'd3';
+    import RadarChart from '@/components/radarChart';
+
+    var axes = [
+        {
+            name: "WinRate",
+            legend: null
+        },
+        {
+            name: "KDA",
+            legend: null
+        },
+        {
+            name: "Kills",
+            legend: null
+        },
+        {
+            name: "Vision",
+            legend: null
+        },
+        {
+            name: "Crowd Control",
+            legend: null
+        },
+        {
+            name: "Map Objectives",
+            legend: null
+        },
+        {
+            name: "Golds",
+            legend: null
+        },
+        {
+            name: "Damages",
+            legend: null
+        },
+        {
+            name: "Tanking",
+            legend: null
+        },
+    ];
+
+    function draw() {
+
+        //Call function to draw the Radar chart
+        const radar = new RadarChart(".radarChart", axes, {w:250, h:250});
 
 
-      /* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
+        var sets = require('../assets/stats/1.json').Positions.find(p => p._id == 'MIDDLE').Sets
+        var b = getMinMax(sets);
 
-			//////////////////////////////////////////////////////////////
-			//////////////////////// Set-Up //////////////////////////////
-			//////////////////////////////////////////////////////////////
+        var i = 0;
+        setInterval(function(){
 
-			var margin = {top: 100, right: 100, bottom: 100, left: 100},
-				width = Math.min(700, window.innerWidth - 10) - margin.left - margin.right,
-				height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+            var s = sets[i++];
+            var d = [
+                (s.winRate - b.min.winRate) / (b.max.winRate - b.min.winRate),
+                (s.kda - b.min.kda) / (b.max.kda - b.min.kda),
+                (s.kills - b.min.kills) / (b.max.kills - b.min.kills),
+                (s.visionScore - b.min.visionScore) / (b.max.visionScore - b.min.visionScore),
+                (s.controlScore - b.min.controlScore) / (b.max.controlScore - b.min.controlScore),
+                (s.turretsDamage - b.min.turretsDamage) / (b.max.turretsDamage - b.min.turretsDamage),
+                (s.goldEarned - b.min.goldEarned) / (b.max.goldEarned - b.min.goldEarned),
+                (s.dealtDamage - b.min.dealtDamage) / (b.max.dealtDamage - b.min.dealtDamage),
+                (s.takenDamage - b.min.takenDamage) / (b.max.takenDamage - b.min.takenDamage)
 
-			//////////////////////////////////////////////////////////////
-			////////////////////////// Data //////////////////////////////
-			//////////////////////////////////////////////////////////////
 
-			var data = [
-					  [//iPhone
-						{axis:"Battery Life",value:0.22},
-						{axis:"Brand",value:0.28},
-						{axis:"Contract Cost",value:0.29},
-						{axis:"Design And Quality",value:0.17},
-						{axis:"Have Internet Connectivity",value:0.22},
-						{axis:"Large Screen",value:0.02},
-						{axis:"Price Of Device",value:0.21},
-						{axis:"To Be A Smartphone",value:0.50}
-					  ],[//Samsung
-						{axis:"Battery Life",value:0.27},
-						{axis:"Brand",value:0.16},
-						{axis:"Contract Cost",value:0.35},
-						{axis:"Design And Quality",value:0.13},
-						{axis:"Have Internet Connectivity",value:0.20},
-						{axis:"Large Screen",value:0.13},
-						{axis:"Price Of Device",value:0.35},
-						{axis:"To Be A Smartphone",value:0.38}
-					  ],[//Nokia Smartphone
-						{axis:"Battery Life",value:0.26},
-						{axis:"Brand",value:0.10},
-						{axis:"Contract Cost",value:0.30},
-						{axis:"Design And Quality",value:0.14},
-						{axis:"Have Internet Connectivity",value:0.22},
-						{axis:"Large Screen",value:0.04},
-						{axis:"Price Of Device",value:0.41},
-						{axis:"To Be A Smartphone",value:0.30}
-					  ]
-					];
-			//////////////////////////////////////////////////////////////
-			//////////////////// Draw the Chart //////////////////////////
-			//////////////////////////////////////////////////////////////
+            ];
 
-			var color = d3.scale.ordinal()
-				.range(["#EDC951","#CC333F","#00A0B0"]);
+            console.log(d);
+            radar.setData([d]);
 
-			var radarChartOptions = {
-			  w: width,
-			  h: height,
-			  margin: margin,
-			  maxValue: 0.5,
-			  levels: 5,
-			  roundStrokes: true,
-			  color: color
-			};
-			//Call function to draw the Radar chart
-			RadarChart(".radarChart", data, radarChartOptions);
+        }, 1000);
 
-export default {
+    }
 
-}
+    function getMinMax(sets){
+        var min = Object.assign({}, sets[0]);
+        var max = Object.assign({}, sets[0]);
+
+        sets.map(function(s){
+            for(var prop in s){          
+                if(min[prop] > s[prop]) min[prop] = s[prop];
+                if(max[prop] < s[prop]) max[prop] = s[prop];
+            }
+        });
+
+        return{min: min, max:max};
+    }
+
+
+
+    window.onload = draw;
+
+
+    export default {
+
+    }
 </script>
 
 <style lang="stylus">
-.radarChart
-  font-size: 11px;
-  font-weight: 300;
-  fill: #242424;
-  text-align: center;
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
-  cursor: default;
 
-.legend
-  font-family: 'Raleway', sans-serif;
-  fill: #333333;
+.radarChart {
+font-size: 11px;
+font-weight: 300;
+fill: #242424;
+text-align: center;
+text-shadow: 0 1px 0 #fff,
+1px 0 0 #fff,
+-1px 0 0 #fff,
+0 -1px 0 #fff;
+cursor: default;
 
-.tooltip
-  fill: #333333;
+}
+
+.legend {font-family: Georgia,
+serif; //Impact, Charcoal, sans-serif;
+fill: #333333;}
+
+.tooltip {fill: #333333;}
+
+div.tooltip {
+position: absolute;
+text-align: center;
+width: 60px;
+height: 28px;
+padding: 2px;
+font: 12px sans-serif;
+background: lightsteelblue;
+border: 0px;
+border-radius: 8px;
+pointer-events: none;
+}
 </style>
-
