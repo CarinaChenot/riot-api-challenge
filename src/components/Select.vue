@@ -9,7 +9,7 @@
       </div>
     </div>
   </div>
-  <Runes v-if="selectedChampion && selectedLane" />
+  <Runes v-if="selectedChampion && selectedLane" v-on:runeSetSelected="loadStats" />
 </div>
 </template>
 
@@ -18,7 +18,7 @@ import Runes from '@/components/Runes'
 import Search from '@/components/Search'
 import champions from '@/data/champion.json'
 import * as alertify from 'alertifyjs';
-    
+
 require('alertifyjs/build/css/alertify.min.css')
 require('alertifyjs/build/css/themes/semantic.min.css')
 
@@ -35,6 +35,7 @@ export default {
       selectedRune: null,
       lanes: ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'SUPPORT'],
       stats: null,
+      runeSetStats: null,
     }
   },
   mounted() {
@@ -63,18 +64,22 @@ export default {
         })
         .then((json) => {
           this.stats = this.getSets(json);
-		  if(this.stats) 
+		  if(this.stats)
 			  this.$emit('change', this.stats);
         });
     },
     getSets(statsJson) {
       const index = statsJson.Positions.findIndex(p => p._id == this.selectedLane)
-      
+
       if(index == -1){
           alertify.alert ("Oops!", "We don't have any data for " + this.selectedChampion + " " + this.selectedLane);
       }
       else
         return statsJson.Positions[index].Sets;
+    },
+    loadStats(runeIdentifier) {
+      // Si ça renvoie -1 c'est que y'a pas de data pour ce runeSet (ou alors j'ai merdé qq part)
+      this.runeSetStats = this.stats.findIndex(p => p._id.runeIdentifier === runeIdentifier)
     }
   }
 }
