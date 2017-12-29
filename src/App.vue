@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <router-view/>
-    <Graph/>
-    <Select />
-    <FamousSets />
+    <Select @change="val => {sets = val; selectedSets = val[0]}"/>
+	<Graph :sets="sets" :selectedSets="selectedSets"/>
+    <FamousSets /> <!-- :sets="sets" -->
   </div>
 </template>
 
@@ -18,6 +18,12 @@ export default {
     Graph,
     Select,
     FamousSets,
+  },
+   data() {
+    return {
+	  sets: [],
+	  selectedSets: []
+    }
   }
 }
 </script>

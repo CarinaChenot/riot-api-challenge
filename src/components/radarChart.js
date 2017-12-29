@@ -41,7 +41,6 @@ function merge(conf1, conf2) {
 }
 
 //adapted from https://www.visualcinnamon.com/2015/10/different-look-d3-radar-chart.html
-/* Radar chart design created by Nadieh Bremer - VisualCinnamon.com */
 export default class RadarChart {
 
     constructor(id, axes, options) {
@@ -143,6 +142,7 @@ export default class RadarChart {
             .style("font-size", "11px")
             .style("pointer-events", "all")
             .attr("text-anchor", "middle")
+			.attr("cursor", "pointer")
             .attr("dy", "0.35em")
             .attr("x", function(d, i) {
                 return rScale(cfg.labelFactorX) * Math.cos(angleSlice * i - Math.PI / 2);
@@ -165,6 +165,7 @@ export default class RadarChart {
             })
             .call(wrapText, cfg.wrapWidth);
 
+		this.id = id;
         this.g = g;
         this.rScale = rScale;
         this.angleSlice = angleSlice;
@@ -190,8 +191,8 @@ export default class RadarChart {
             });
 
         if (this.data != null) {
-
-            if (this.data.length !== data.length) {           
+			
+            if (this.data.length !== data.length) {
                 g.selectAll(".radarWrapper").filter(function(d, i) {
                         return i >= data.length
                     }).attr("opacity", "1")
@@ -213,13 +214,13 @@ export default class RadarChart {
         } else {
 
             //Create a wrapper for the blobs 
-            const blobWrapper = g.selectAll(".radarWrapper")
+            var blobWrapper = this.blobWrapper = g.selectAll(".radarWrapper")
                 .data(data)
                 .enter().append("g")
                 .attr("class", "radarWrapper");
-
+   
             //Append the backgrounds 
-            const blobBackground = blobWrapper.append("path")
+            var blobBackground = this.blobBackground = blobWrapper.append("path")
                 .attr("class", "radarArea")
                 .attr("d", radarLine)
                 .style("fill-opacity", 0.7)
@@ -242,7 +243,7 @@ export default class RadarChart {
                 });
 
             //Create the outlines 
-            const blobOutlines = blobWrapper.append("path")
+            var blobOutlines = this.blobOutlines = blobWrapper.append("path")
                 .attr("class", "radarStroke")
                 .attr("d", radarLine)
                 .style("stroke-width", cfg.strokeWidth + "px")
@@ -273,11 +274,7 @@ export default class RadarChart {
         }
 
         this.data = data;
-        this.blobWrapper = blobWrapper;
-        this.blobBackground = blobBackground;
-        this.blobOutlines = blobOutlines;
-        //this.blobCircleWrapper = blobCircleWrapper;
-
+  
         //Wrapper for the invisible circles on top
         g.selectAll(".radarCircleWrapper").remove();
         var blobCircleWrapper = g.selectAll(".radarCircleWrapper")
@@ -294,6 +291,7 @@ export default class RadarChart {
             .attr("class", "radarInvisibleCircle")
             .attr("r", cfg.dotRadius * 1.5)
             .attr("fill", "none")
+			.attr("cursor", "pointer")
             .attr("cx", function(d, i) {
                 return rScale(d) * Math.cos(angleSlice * i - Math.PI / 2);
             })
@@ -302,13 +300,15 @@ export default class RadarChart {
             })
             .style("pointer-events", "all")
             .on("mouseover", function(d, i) {
+				
              /*   tooltip
                     .html(d.toFixed(2))
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 40) + "px")
                     .transition().duration(350).style("opacity", .9);*/
             })
-            .on("mouseout", function() {
+            .on("mouseout", function(d, i) {
+
               /*  tooltip.transition().duration(350)
                     .style("opacity", 0);*/
             });

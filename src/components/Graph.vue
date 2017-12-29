@@ -1,6 +1,5 @@
 <template>
 <div class="radarChart"></div>
-
 </template>
 
 <script>
@@ -46,20 +45,19 @@
         },
     ];
 
-    function draw() {
+	var radar = null;
+	
+    function initChart() {
 
         //Call function to draw the Radar chart
-        const radar = new RadarChart(".radarChart", axes, {w:250, h:250});
+        radar = new RadarChart(".radarChart", axes, {w:250, h:250});
+    }
 
-
-        var sets = require('../assets/stats/1.json').Positions.find(p => p._id == 'MIDDLE').Sets
-        var b = getMinMax(sets);
-
-        var i = 0;
-        setInterval(function(){
-
-            var s = sets[i++];
-            var d = [
+	function draw(sets, s){
+		
+		var b = getMinMax(sets);
+		
+		var d = [
                 (s.winRate - b.min.winRate) / (b.max.winRate - b.min.winRate),
                 (s.kda - b.min.kda) / (b.max.kda - b.min.kda),
                 (s.kills - b.min.kills) / (b.max.kills - b.min.kills),
@@ -69,17 +67,11 @@
                 (s.goldEarned - b.min.goldEarned) / (b.max.goldEarned - b.min.goldEarned),
                 (s.dealtDamage - b.min.dealtDamage) / (b.max.dealtDamage - b.min.dealtDamage),
                 (s.takenDamage - b.min.takenDamage) / (b.max.takenDamage - b.min.takenDamage)
-
-
             ];
-
-            console.log(d);
-            radar.setData([d]);
-
-        }, 1000);
-
-    }
-
+			
+		radar.setData([d]);
+	}
+	
     function getMinMax(sets){
         var min = Object.assign({}, sets[0]);
         var max = Object.assign({}, sets[0]);
@@ -96,11 +88,22 @@
 
 
 
-    window.onload = draw;
+    window.onload = initChart;
 
 
     export default {
-
+		props: [
+			'sets',
+			'selectedSets',
+		],
+		watch: { 
+      	  sets: function(val) {
+             draw(this.sets, this.selectedSets);
+          },
+		  selectedSets: function(val) {
+             draw(this.sets, this.selectedSets);
+          }
+      }
     }
 </script>
 

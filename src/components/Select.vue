@@ -63,6 +63,8 @@ export default {
         })
         .then((json) => {
           this.stats = this.getSets(json);
+		  if(this.stats) 
+			  this.$emit('change', this.stats);
         });
     },
     getSets(statsJson) {
