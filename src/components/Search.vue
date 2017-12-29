@@ -45,6 +45,8 @@ export default {
   display flex
   flex-direction column
   box-shadow: 0 5px 100px rgba(37,43,51,.1)
+  max-width: 400px;
+  margin: 0 auto;
 
 .result_champion
   display flex

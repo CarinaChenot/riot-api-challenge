@@ -184,7 +184,7 @@ export default class RadarChart {
         var radarLine = d3.radialLine()
             .curve(d3.curveCardinalClosed) //curveLinearClosed
             .radius(function(d) {
-                return rScale(d);
+                return rScale(d.value);
             })
             .angle(function(d, i) {
                 return i * angleSlice;
@@ -205,10 +205,10 @@ export default class RadarChart {
             this.blobWrapper.selectAll(".radarCircle").data(function(d) {
                     return d;
                 }).transition().duration(1800).attr("cx", function(d, i) {
-                    return rScale(d) * Math.cos(angleSlice * i - Math.PI / 2);
+                    return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2);
                 })
                 .attr("cy", function(d, i) {
-                    return rScale(d) * Math.sin(angleSlice * i - Math.PI / 2);
+                    return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2);
                 });
 
         } else {
@@ -263,10 +263,10 @@ export default class RadarChart {
                 .attr("r", cfg.dotRadius)
                 .style("fill-opacity", 0.8)
                 .attr("cx", function(d, i) {
-                    return rScale(d) * Math.cos(angleSlice * i - Math.PI / 2);
+                    return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2);
                 })
                 .attr("cy", function(d, i) {
-                    return rScale(d) * Math.sin(angleSlice * i - Math.PI / 2);
+                    return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2);
                 })
                 .style("fill", function(d, i, j) {
                     return cfg.color(j);
@@ -293,24 +293,24 @@ export default class RadarChart {
             .attr("fill", "none")
 			.attr("cursor", "pointer")
             .attr("cx", function(d, i) {
-                return rScale(d) * Math.cos(angleSlice * i - Math.PI / 2);
+                return rScale(d.value) * Math.cos(angleSlice * i - Math.PI / 2);
             })
             .attr("cy", function(d, i) {
-                return rScale(d) * Math.sin(angleSlice * i - Math.PI / 2);
+                return rScale(d.value) * Math.sin(angleSlice * i - Math.PI / 2);
             })
             .style("pointer-events", "all")
             .on("mouseover", function(d, i) {
 				
-             /*   tooltip
-                    .html(d.toFixed(2))
+                tooltip
+                    .html(d.legend)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 40) + "px")
-                    .transition().duration(350).style("opacity", .9);*/
+                    .transition().duration(350).style("opacity", .9);
             })
             .on("mouseout", function(d, i) {
 
-              /*  tooltip.transition().duration(350)
-                    .style("opacity", 0);*/
+                tooltip.transition().duration(350)
+                    .style("opacity", 0);
             });
     }
 }

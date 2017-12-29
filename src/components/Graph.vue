@@ -9,7 +9,7 @@
     var axes = [
         {
             name: "WinRate",
-            legend: null
+            legend: "The average WinRate for that runes set"
         },
         {
             name: "KDA",
@@ -17,15 +17,15 @@
         },
         {
             name: "Kills",
-            legend: null
+            legend: "The poor souls you left behind"
         },
         {
             name: "Vision",
-            legend: null
+            legend: "How much vision you put on the map. Put a ward, save an ally"
         },
         {
             name: "Crowd Control",
-            legend: null
+            legend: "How much crow control you apply on the opponents. Preventing them to reach your allies !"
         },
         {
             name: "Map Objectives",
@@ -33,11 +33,11 @@
         },
         {
             name: "Golds",
-            legend: null
+            legend: "Golds won during the game"
         },
         {
             name: "Damages",
-            legend: null
+            legend: "Average damage dealt on the opponents"
         },
         {
             name: "Tanking",
@@ -53,23 +53,30 @@
         radar = new RadarChart(".radarChart", axes, {w:250, h:250});
     }
 
-	function draw(sets, s){
+	function draw(sets, selectedSets){	
+		var data = getChartStats(sets, selectedSets);
+		radar.setData(data);
+	}
+	
+	function getChartStats(sets, selectedSets){
+	
+		var bounds = getMinMax(sets);
+		var data = [];
 		
-		var b = getMinMax(sets);
-		
-		var d = [
-                (s.winRate - b.min.winRate) / (b.max.winRate - b.min.winRate),
-                (s.kda - b.min.kda) / (b.max.kda - b.min.kda),
-                (s.kills - b.min.kills) / (b.max.kills - b.min.kills),
-                (s.visionScore - b.min.visionScore) / (b.max.visionScore - b.min.visionScore),
-                (s.controlScore - b.min.controlScore) / (b.max.controlScore - b.min.controlScore),
-                (s.turretsDamage - b.min.turretsDamage) / (b.max.turretsDamage - b.min.turretsDamage),
-                (s.goldEarned - b.min.goldEarned) / (b.max.goldEarned - b.min.goldEarned),
-                (s.dealtDamage - b.min.dealtDamage) / (b.max.dealtDamage - b.min.dealtDamage),
-                (s.takenDamage - b.min.takenDamage) / (b.max.takenDamage - b.min.takenDamage)
-            ];
-			
-		radar.setData([d]);
+		for(var set of selectedSets){
+			data.push([
+				{legend:(100 * set.winRate).toFixed(1) + '%', value:(set.winRate - bounds.min.winRate) / (bounds.max.winRate - bounds.min.winRate)},
+				{legend:set.kda.toFixed(1) + ' KDA', value:(set.kda - bounds.min.kda) / (bounds.max.kda - bounds.min.kda)},
+				{legend:set.kills.toFixed(1) + ' kills', value:(set.kills - bounds.min.kills) / (bounds.max.kills - bounds.min.kills)},
+                {legend:Math.round(set.visionScore)  + ' ward points', value:(set.visionScore - bounds.min.visionScore) / (bounds.max.visionScore - bounds.min.visionScore)},
+                {legend:Math.round(set.controlScore)+ ' seconds', value:(set.controlScore - bounds.min.controlScore) / (bounds.max.controlScore - bounds.min.controlScore)},
+                {legend:Math.round(set.turretsDamage) + ' damage', value:(set.turretsDamage - bounds.min.turretsDamage) / (bounds.max.turretsDamage - bounds.min.turretsDamage)},
+                {legend:Math.round(set.goldEarned) + ' gold', value:(set.goldEarned - bounds.min.goldEarned) / (bounds.max.goldEarned - bounds.min.goldEarned)},
+                {legend:Math.round(set.dealtDamage) + ' damage', value:(set.dealtDamage - bounds.min.dealtDamage) / (bounds.max.dealtDamage - bounds.min.dealtDamage)},
+                {legend:Math.round(set.takenDamage) + ' damage', value:(set.takenDamage - bounds.min.takenDamage) / (bounds.max.takenDamage - bounds.min.takenDamage)}
+            ]);
+		}		
+		return data;
 	}
 	
     function getMinMax(sets){
@@ -97,9 +104,6 @@
 			'selectedSets',
 		],
 		watch: { 
-      	  sets: function(val) {
-             draw(this.sets, this.selectedSets);
-          },
 		  selectedSets: function(val) {
              draw(this.sets, this.selectedSets);
           }
@@ -126,16 +130,19 @@ cursor: default;
 serif; //Impact, Charcoal, sans-serif;
 fill: #333333;}
 
-.tooltip {fill: #333333;}
+//.tooltip {fill: #333333;}
 
 div.tooltip {
 position: absolute;
 text-align: center;
-width: 60px;
-height: 28px;
-padding: 2px;
+min-height: 15px;
+min-width: 40px;
+padding: 4px 8px;
 font: 12px sans-serif;
-background: lightsteelblue;
+text-shadow: none;
+//background: lightsteelblue;
+background:black;
+color:white;
 border: 0px;
 border-radius: 8px;
 pointer-events: none;

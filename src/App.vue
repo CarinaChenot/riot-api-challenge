@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
-    <Select @change="val => {sets = val; selectedSets = val[0]}"/>
+    <Select @change="val => {sets = val; selectedSets = [val[0]]}"/>
 	<Graph :sets="sets" :selectedSets="selectedSets"/>
     <FamousSets /> <!-- :sets="sets" -->
   </div>
