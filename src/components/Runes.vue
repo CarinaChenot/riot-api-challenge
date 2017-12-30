@@ -4,7 +4,9 @@
   <div class="runes_container">
     <!-- Primary Path -->
     <div class="rune_path">
-      <div class="rune_path_slot" @click="currentChoice = 'path'"></div>
+      <div class="rune_path_slot" @click="currentChoice = 'path'">
+        <img :src="runePath(primaryPath)" v-if="primaryPath" alt="rune.name" class="rune_image">
+      </div>
       <div class="slot_options" v-if="currentChoice === 'path'">
         <div class="rune" v-for="rune in runes" @click="selectPrimaryPath(rune)" :key="rune.id">
           <img :src="runePath(rune)" alt="rune.name" class="rune_image">
@@ -16,7 +18,9 @@
     <template v-for="(n, index) in 4">
       <!-- Keystone, Greater Rune, Rune I, Rune II -->
       <div class="rune_path" :key="'rune_' + n">
-        <div class="rune_path_slot" @click="currentChoice = index"></div>
+        <div class="rune_path_slot" @click="currentChoice = index">
+            <img :src="runePath({id:runeSet[index]})" v-if="runeSet[index]" alt="rune.name" class="rune_image">
+        </div>
         <div class="slot_options" v-if="currentChoice === index">
           <div class="rune" v-for="rune in primaryPath.slots[index].runes" @click="selectRune(rune, index)" :key="rune.id">
             <img :src="runePath(rune)" alt="rune.name"  class="rune_image">
@@ -29,7 +33,9 @@
 
     <!-- Secondary Path -->
     <div class="rune_path">
-      <div class="rune_path_slot" @click="currentChoice = 'path2'"></div>
+      <div class="rune_path_slot" @click="currentChoice = 'path2'">
+        <img :src="runePath(secondaryPath)" v-if="secondaryPath" alt="rune.name" class="rune_image">  
+      </div>
       <div class="slot_options" v-if="currentChoice === 'path2'">
         <div class="rune" v-for="rune in runes" @click="selectSecondaryPath(rune)" :key="rune.id">
           <img :src="runePath(rune)" alt="rune.name" class="rune_image">
@@ -42,7 +48,9 @@
     <template v-for="(n, index) in 2">
       <!-- Rune I, Rune II-->
       <div class="rune_path" :key="'rune_' + (n + 4)">
-        <div class="rune_path_slot" @click="currentChoice = index + 4"></div>
+        <div class="rune_path_slot" @click="currentChoice = index + 4">
+          <img :src="runePath({id:runeSet[index + 4]})" v-if="runeSet[index + 4]" alt="rune.name" class="rune_image">
+        </div>
         <div class="slot_options" v-if="currentChoice === index + 4">
           <div class="rune" v-for="rune in secondaryPath.slots[index + 2].runes" @click="selectRune(rune, index + 4)" :key="rune.id">
             <img :src="runePath(rune)" alt="rune.name" class="rune_image">
@@ -56,10 +64,9 @@
 </div>
 </template>
 
+
 <script>
 import runesReforged from '@/data/runesReforged.json';
-
-console.log(runesReforged)
 
 export default {
   data() {
@@ -76,6 +83,7 @@ export default {
   methods: {
     selectPrimaryPath(rune) {
       this.primaryPath = rune;
+      this.currentChoice = null;
 
       // On runePath change, clean already selected runes
       for (let i = 0; i < 4; i++) {
@@ -84,6 +92,7 @@ export default {
     },
     selectSecondaryPath(rune) {
       this.secondaryPath = rune;
+      this.currentChoice = null;    
 
       // On runePath change, clean already selected runes
       for (let i = 4; i < 6; i++) {
@@ -92,12 +101,12 @@ export default {
     },
     selectRune(rune, index) {
       this.runeSet[index] = rune.id;
+      this.currentChoice = null;
 
       // When all runes are selected, emit the runeIdentifier to the parent component
       if (this.isRuneSetFull()) this.$emit('runeSetSelected', this.runeSet.join(''));
     },
     runePath(rune) {
-      // console.log(rune.id)
       return require(`../assets/runes/${rune.id}.png`);
     },
     isRuneSetFull() {
@@ -132,6 +141,9 @@ export default {
 .slot_options
   display flex
 
+.slot_options .rune
+  cursor:pointer;
+
 .rune_slot_options
   display flex
 
@@ -142,8 +154,9 @@ export default {
 .rune_path_slot
   background black
   border-radius 100%
-  height 50px
-  width 50px
+  height 42px
+  width 42px
+  cursor: pointer
 
 .runes_container
   display grid
@@ -152,7 +165,7 @@ export default {
   grid-auto-flow column
 
 .rune_image
-  max-width 50px
-  max-height 50px
+  max-width 42px
+  max-height 42px
 </style>
 

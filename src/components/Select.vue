@@ -2,7 +2,7 @@
 <div class="select-wrapper">
   <Search v-on:selectedChamp="selectChampion" v-if="!selectedChampion"/>
   <div class="select-lane" v-if="selectedChampion && !selectedLane">
-    <h1>Select lane</h1>
+    <h1>Select your lane</h1>
     <div class="lanes-grid">
       <div class="lane" v-for="lane in lanes" @click="selectLane(lane)" :key="lane">
         <img :src="lanePath(lane)" :alt="lane">
@@ -64,8 +64,6 @@ export default {
         })
         .then((json) => {
           this.stats = this.getSets(json);
-		  if(this.stats)
-			  this.$emit('change', this.stats);
         });
     },
     getSets(statsJson) {
@@ -74,12 +72,20 @@ export default {
       if(index == -1){
           alertify.alert ("Oops!", "We don't have any data for " + this.selectedChampion + " " + this.selectedLane);
       }
-      else
-        return statsJson.Positions[index].Sets;
+      else{
+          this.$emit('runeSetsLoaded', statsJson.Positions[index].Sets);
+          return statsJson.Positions[index].Sets;
+      }
     },
     loadStats(runeIdentifier) {
       // Si ça renvoie -1 c'est que y'a pas de data pour ce runeSet (ou alors j'ai merdé qq part)
-      this.runeSetStats = this.stats.findIndex(p => p._id.runeIdentifier === runeIdentifier)
+      this.runeSetStats = this.stats.find(p => p._id.runeIdentifier === runeIdentifier)
+      
+      if(!this.runeSetStats){
+          alertify.alert ("Oops!", "We don't have any data for that runes set");
+      }
+      else
+        this.$emit('runeSetSelected', this.runeSetStats);
     }
   }
 }

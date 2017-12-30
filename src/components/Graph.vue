@@ -1,5 +1,8 @@
 <template>
-<div class="radarChart"></div>
+<div>   
+    <div class="radarChart"></div>
+    <span class="md-body-2">Select your champion, your lane and your runes to see what can bring you</span>
+</div>
 </template>
 
 <script>
@@ -54,7 +57,8 @@
     }
 
 	function draw(sets, selectedSets){	
-		var data = getChartStats(sets, selectedSets);
+		var data = getChartStats(sets, selectedSets.map(s => sets.find(s2 => s == s2._id.runeIdentifier)));
+
 		radar.setData(data);
 	}
 	
@@ -118,17 +122,17 @@ font-size: 11px;
 font-weight: 300;
 fill: #242424;
 text-align: center;
-text-shadow: 0 1px 0 #fff,
+/*text-shadow: 0 1px 0 #fff,
 1px 0 0 #fff,
 -1px 0 0 #fff,
-0 -1px 0 #fff;
+0 -1px 0 #fff;*/
 cursor: default;
 
 }
 
 .legend {font-family: Georgia,
 serif; //Impact, Charcoal, sans-serif;
-fill: #333333;}
+fill: white;}
 
 //.tooltip {fill: #333333;}
 
