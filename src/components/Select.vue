@@ -85,7 +85,7 @@ export default {
           alertify.alert ("Oops!", "We don't have any data for that runes set");
       }
       else
-        this.$emit('runeSetSelected', this.runeSetStats);
+        this.$emit('runeSetSelected', this.runeSetStats._id.runeIdentifier);
     }
   }
 }

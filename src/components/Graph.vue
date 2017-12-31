@@ -68,6 +68,9 @@
 		var data = [];
 		
 		for(var set of selectedSets){
+            
+            if(set !== undefined){
+            
 			data.push([
 				{legend:(100 * set.winRate).toFixed(1) + '%', value:(set.winRate - bounds.min.winRate) / (bounds.max.winRate - bounds.min.winRate)},
 				{legend:set.kda.toFixed(1) + ' KDA', value:(set.kda - bounds.min.kda) / (bounds.max.kda - bounds.min.kda)},
@@ -79,6 +82,8 @@
                 {legend:Math.round(set.dealtDamage) + ' damage', value:(set.dealtDamage - bounds.min.dealtDamage) / (bounds.max.dealtDamage - bounds.min.dealtDamage)},
                 {legend:Math.round(set.takenDamage) + ' damage', value:(set.takenDamage - bounds.min.takenDamage) / (bounds.max.takenDamage - bounds.min.takenDamage)}
             ]);
+                
+            }
 		}		
 		return data;
 	}

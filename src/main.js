@@ -4,9 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import InstantSearch from 'vue-instantsearch';
+import { MdButton } from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
 
 Vue.config.productionTip = false
 
+Vue.use(MdButton)
 Vue.use(InstantSearch);
 
 /* eslint-disable no-new */

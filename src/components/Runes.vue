@@ -13,13 +13,14 @@
           {{ rune.name }}
         </div>
       </div>
+      <span class="rune_text" v-if="primaryPath">{{primaryPath.name}}</span>
       <span class="rune_text" v-else>Choose your primary path</span>
     </div>
     <template v-for="(n, index) in 4">
       <!-- Keystone, Greater Rune, Rune I, Rune II -->
       <div class="rune_path" :key="'rune_' + n">
         <div class="rune_path_slot" @click="currentChoice = index">
-            <img :src="runePath({id:runeSet[index]})" v-if="runeSet[index]" alt="rune.name" class="rune_image">
+            <img :src="runePath(runeSet[index])" v-if="runeSet[index]" alt="rune.name" class="rune_image">
         </div>
         <div class="slot_options" v-if="currentChoice === index">
           <div class="rune" v-for="rune in primaryPath.slots[index].runes" @click="selectRune(rune, index)" :key="rune.id">
@@ -27,6 +28,7 @@
             {{ rune.name }}
           </div>
         </div>
+        <span class="rune_text" v-if="runeSet[index]">{{runeSet[index].name}}</span>
         <span class="rune_text" v-else>Choose your {{ runeText[index] }}</span>
       </div>
     </template>
@@ -42,6 +44,7 @@
           {{ rune.name }}
         </div>
       </div>
+      <span class="rune_text" v-if="secondaryPath">{{secondaryPath.name}}</span>
       <span class="rune_text" v-else>Choose your secondary path</span>
     </div>
 
@@ -49,18 +52,22 @@
       <!-- Rune I, Rune II-->
       <div class="rune_path" :key="'rune_' + (n + 4)">
         <div class="rune_path_slot" @click="currentChoice = index + 4">
-          <img :src="runePath({id:runeSet[index + 4]})" v-if="runeSet[index + 4]" alt="rune.name" class="rune_image">
+          <img :src="runePath(runeSet[index + 4])" v-if="runeSet[index + 4]" alt="rune.name" class="rune_image">
         </div>
         <div class="slot_options" v-if="currentChoice === index + 4">
-          <div class="rune" v-for="rune in secondaryPath.slots[index + 2].runes" @click="selectRune(rune, index + 4)" :key="rune.id">
-            <img :src="runePath(rune)" alt="rune.name" class="rune_image">
-            {{ rune.name }}
+          <div v-for="n in 3" style="float:left">    
+            <div class="rune" v-for="rune in secondaryPath.slots[n].runes" @click="selectRune(rune, index + 4)" :key="rune.id">
+              <img :src="runePath(rune)" alt="rune.name" class="rune_image">
+              {{ rune.name }}
+            </div>            
           </div>
         </div>
+        <span class="rune_text" v-if="runeSet[index + 4]">{{runeSet[index + 4].name}}</span>  
         <span class="rune_text" v-else>Choose your {{ runeText[index + 4] }}</span>
       </div>
     </template>
   </div>
+<md-button v-if="isRuneSetFull()" class="md-raised md-primary" @click="emit()">Show on chart</md-button>
 </div>
 </template>
 
@@ -100,11 +107,14 @@ export default {
       }
     },
     selectRune(rune, index) {
-      this.runeSet[index] = rune.id;
+      this.runeSet[index] = rune;
       this.currentChoice = null;
 
       // When all runes are selected, emit the runeIdentifier to the parent component
-      if (this.isRuneSetFull()) this.$emit('runeSetSelected', this.runeSet.join(''));
+      if (this.isRuneSetFull()) this.emit();
+    },
+    emit(){
+        this.$emit('runeSetSelected', this.runeSet.map(r => r.id).join(''));
     },
     runePath(rune) {
       return require(`../assets/runes/${rune.id}.png`);
@@ -134,22 +144,39 @@ export default {
   flex-direction column
   align-items center
 
+.select_rune .rune .rune_image:hover, .select_rune .rune_path_slot .rune_image:hover
+  border: 2px solid #6a6abf;
+  border-radius: 20px;
+
 .runes_child
   display grid
   grid-template-columns repeat(2, 1fr)
 
 .slot_options
   display flex
+  position: absolute
+  background: black
+  padding: 5px 2px
+  border-radius: 20px
+  margin-left: 40px
 
 .slot_options .rune
   cursor:pointer;
+  float:left
+
 
 .rune_slot_options
   display flex
 
+.rune_text
+  font-size:12px
+  margin-left:4px
+
+
 .rune_path
   display flex
   align-items center
+  margin: 8px 2px
 
 .rune_path_slot
   background black

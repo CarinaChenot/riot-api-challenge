@@ -7,14 +7,14 @@
     </div>
 
     <div class="md-layout md-alignment-top-space-around">
-        <div class="box md-layout-item md-size-30">
+        <div class="box md-layout-item md-size-25">
             <Select v-on:runeSetsLoaded="val => {sets = val;}" 
                     v-on:runeSetSelected="val => {selectedSets = val;}" />
         </div>        
         <div class="box md-layout-item md-size-35">
             <Graph :sets="sets" :selectedSets="selectedSets"/>
         </div>
-        <div class="box md-layout-item md-size-25">
+        <div class="box md-layout-item md-size-30">
             <FamousSets :sets="sets" v-on:runeSetSelected="val => {selectedSets = [val];}"/>
         </div>
     </div>
@@ -25,6 +25,7 @@
     import Select from '@/components/Select';
     import FamousSets from '@/components/FamousSets';
     import Graph from '@/components/Graph';
+    import VueMaterial from 'vue-material'    
     import 'vue-material/dist/vue-material.min.css'
     import 'vue-material/dist/theme/default-dark.css'
 
