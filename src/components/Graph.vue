@@ -1,7 +1,6 @@
 <template>
 <div>   
     <div class="radarChart"></div>
-    <span class="md-body-2">Select your champion, your lane and your runes to see what can bring you</span>
 </div>
 </template>
 

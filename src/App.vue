@@ -9,7 +9,7 @@
     <div class="md-layout md-alignment-top-space-around">
         <div class="box md-layout-item md-size-25">
             <Select v-on:runeSetsLoaded="val => {sets = val;}" 
-                    v-on:runeSetSelected="val => {selectedSets = val;}" />
+                    v-on:runeSetSelected="val => {selectedSets = [val];}" />
         </div>        
         <div class="box md-layout-item md-size-35">
             <Graph :sets="sets" :selectedSets="selectedSets"/>
