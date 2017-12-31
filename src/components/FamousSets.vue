@@ -1,7 +1,7 @@
 <template>
 <div class="famous_sets">
     <h2>Most Famous</h2>
-    <div @click="selectSet(set)" class="runeset" v-for="set in sortByWinrate(sets)">
+    <div @click="selectSet(set)" class="runeset" v-for="set in sortByWinrate(sets)" v-bind:class="{ active: selectedSet == set._id.runeIdentifier }">
         <div class="winrate">WR :<br/>{{ (100 * set.winRate).toFixed(1) }}%</div>
         <div class="usage">Used in:<br/>{{ (100 * set.p).toFixed(1) }}%</div>
         <div class="rune" v-for="n in 6">
@@ -9,7 +9,7 @@
     </div>
     </div>
     <h2>Most used</h2>
-    <div @click="selectSet(set)" class="runeset" v-for="set in sortByUsage(sets)">
+    <div @click="selectSet(set)" class="runeset" v-for="set in sortByUsage(sets)" v-bind:class="{ active: selectedSet == set._id.runeIdentifier }">
         <div class="winrate">WR :<br/>{{ (100 * set.winRate).toFixed(1) }}%</div>
         <div class="usage">Used in:<br/>{{ (100 * set.p).toFixed(1) }}%</div>
         <div class="rune" v-for="n in 6">
@@ -30,6 +30,7 @@
                 return require(`../assets/runes/${id}.png`);
             },
             selectSet(set){
+                this.selectedSet = set._id.runeIdentifier;
                 this.$emit('runeSetSelected', set._id.runeIdentifier);
             },
             sortByWinrate(sets){
@@ -48,6 +49,7 @@
         data() {
             return {
                 sets: [],
+                selectedSet: undefined
             }
         },
     }
@@ -61,6 +63,9 @@
 .runeset
   display flex
   cursor pointer
+
+.runeset.active
+  background:yellow
 
 .winrate
   color:orange

@@ -1,6 +1,10 @@
 <template>
 <div class="select-wrapper">
   <Search v-on:selectedChamp="selectChampion" v-if="!selectedChampion"/>
+   <div>
+     <img v-if="selectedChampion" :src="championPath(selectedChampion)" :alt="selectedChampion"  class="selectedChampion" @click="selectedChampion = null; selectedLane = null">  
+     <img class="selectedLane" v-if="selectedLane" :src="lanePath(selectedLane)" :alt="selectedLane" @click="selectedLane = null">
+    </div>
   <div class="select-lane" v-if="selectedChampion && !selectedLane">
     <h1>Select your lane</h1>
     <div class="lanes-grid">
@@ -54,6 +58,9 @@ export default {
     lanePath(lane) {
       return require(`../assets/lanes/${lane}.png`);
     },
+    championPath(champ) {
+      return require(`../assets/champions/${champ}.png`);
+    },      
     getStats() {
       let key = this.champions[this.selectedChampion].key;
       let url = `../src/assets/stats/${key}.json`;
@@ -101,6 +108,10 @@ export default {
 .champions-grid
   display grid
   grid-template-columns repeat(10, 1fr)
+
+.selectedLane, .selectedChampion
+  width:55px;
+
 
 .select-lane
   h1
