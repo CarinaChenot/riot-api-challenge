@@ -16,7 +16,7 @@
 <script>
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';
 
-const searchStore = createFromAlgoliaCredentials('6DZDRJMUEP', '081dc30f8b961197b7fe2b93cf18e4e9');
+const searchStore = createFromAlgoliaCredentials('APP_NAME', 'APP_TOKEN');
 
 export default {
   data() {
